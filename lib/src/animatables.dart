@@ -56,7 +56,7 @@ class AnimatableDoubleValue extends BaseAnimatableValue<double, double> {
   static final AnimatableValueParser _parser =
       new AnimatableValueParser<double>();
 
-  AnimatableDoubleValue() : super(0.0, new Scene.empty());
+  AnimatableDoubleValue() : super(0.0, new Scene<double>.empty());
 
   AnimatableDoubleValue.fromMap(
       dynamic map, double scale, double durationFrames)
@@ -133,10 +133,10 @@ class AnimatablePointValue extends BaseAnimatableValue<Offset, Offset> {
 //  Scale
 //
 class AnimatableScaleValue extends BaseAnimatableValue<Offset, Offset> {
-  static final AnimatableValueParser _parser =
+  static final AnimatableValueParser<Offset> _parser =
       new AnimatableValueParser<Offset>();
 
-  AnimatableScaleValue() : super(const Offset(1.0, 1.0), new Scene.empty());
+  AnimatableScaleValue() : super(const Offset(1.0, 1.0), new Scene<Offset>.empty());
 
   AnimatableScaleValue.fromMap(dynamic map, double durationFrames)
       : super.fromKeyframeGroup(
@@ -174,7 +174,7 @@ class AnimatableShapeValue extends BaseAnimatableValue<ShapeData, Path> {
 //  Path
 //
 class AnimatablePathValue extends BaseAnimatableValue<Offset, Offset> {
-  AnimatablePathValue._([Offset initialValue, Scene scene])
+  AnimatablePathValue._([Offset initialValue, Scene<Offset> scene])
       : super(initialValue == null ? const Offset(0.0, 0.0) : initialValue,
             scene);
 
@@ -191,7 +191,7 @@ class AnimatablePathValue extends BaseAnimatableValue<Offset, Offset> {
               new PathKeyframe.fromMap(rawKeyframe, scale, durationFrames))
           .toList();
 
-      Scene scene = new Scene(keyframes);
+      Scene scene = new Scene<Offset>(keyframes);
 
       return new AnimatablePathValue._(null, scene);
     }
@@ -237,9 +237,9 @@ class AnimatableValueParser<T> {
     return new KeyframeGroup(initialValue, scene);
   }
 
-  Scene _parseKeyframes(
+  Scene<T> _parseKeyframes(
       dynamic map, Parser<T> parser, double scale, double durationFrames) {
-    return new Scene.fromMap(map, parser, scale, durationFrames);
+    return new Scene<T>.fromMap(map, parser, scale, durationFrames);
   }
 
   T _parseInitialValue(

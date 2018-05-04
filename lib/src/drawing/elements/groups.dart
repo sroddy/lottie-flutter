@@ -67,7 +67,7 @@ class DrawableGroup extends AnimationDrawable implements PathContent {
   @override
   void setContents(List<Content> contentsBefore, List<Content> contentsAfter) {
     // Do nothing with contents after.
-    final myContentsBefore = [];
+    final myContentsBefore = <Content>[];
     contentsBefore.forEach((content) => myContentsBefore.add(content));
 
     for (int i = _contents.length - 1; i >= 0; i--) {

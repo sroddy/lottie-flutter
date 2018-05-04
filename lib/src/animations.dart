@@ -245,6 +245,7 @@ class PathKeyframeAnimation extends KeyframeAnimation<Offset> {
 
   // TODO: SkPathMeasure https://github.com/flutter/flutter/issues/10428
   //PathMeasure _pathMeasure;
+  Path path;
 
   PathKeyframeAnimation(Scene<Offset> scene) : super(scene);
 

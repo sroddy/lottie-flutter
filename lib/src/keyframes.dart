@@ -152,7 +152,7 @@ class Scene<T> {
     }
   }
 
-  static List<Keyframe> parseKeyframes(dynamic map, Parser parser,
+  static List<Keyframe<T>> parseKeyframes<T>(dynamic map, Parser parser,
       double scale, double durationFrames) {
     if (map == null) {
       return const [];
@@ -164,8 +164,8 @@ class Scene<T> {
     }
 
     return rawKeyframes.map((rawKeyframe) =>
-    new Keyframe.fromMap(rawKeyframe, parser, scale, durationFrames))
-        .toList();
+    new Keyframe<T>.fromMap(rawKeyframe, parser, scale, durationFrames))
+        .toList().cast<Keyframe<T>>();
   }
 
   //
