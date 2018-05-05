@@ -257,10 +257,7 @@ abstract class BaseLayer implements Drawable {
           return;
         case MaskMode.Add:
         default:
-          Rect tempMaskBoundRect = new Rect.fromLTRB(0.0, 0.0, 0.0, 0.0);
-          // TODO: Open issue about Path::computeBounds
-          //_path.computeBounds(tempMaskBoundRect, false);
-          print("MaskMode.Add|Intersect|Unknown are not supported for now");
+          final tempMaskBoundRect = _path.getBounds();
 
           // As we iterate through the masks, we want to calculate the union region
           // of the masks. We initialize the rect with the first mask.

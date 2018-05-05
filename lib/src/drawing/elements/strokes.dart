@@ -136,13 +136,12 @@ class StrokeDrawable extends AnimationDrawable {
       addPathToPath(path, pathGroup._paths[i].path, parentMatrix);
     }
 
-    //TODO: PathMeasure https://github.com/flutter/flutter/issues/10428
-    var totalLength;
-//    pm.setPath(path, false);
-//    double totalLength = pm.getLength();
-//    while (pm.nextContour()) {
-//      totalLength += pm.getLength();
-//    }
+    // FIXME: review
+    var totalLength = 0.0;
+    final pm = path.computeMetrics();
+    for (final metric in pm) {
+      totalLength += metric.length;
+    }
 
     final trimPath = pathGroup._trimPath;
     final offsetLength = totalLength * trimPath.offset / 360.0;
@@ -154,10 +153,8 @@ class StrokeDrawable extends AnimationDrawable {
       final trimPath = pathGroup._paths[j].path;
       trimPath.transform(parentMatrix.storage);
 
-      //TODO: PathMeasure https://github.com/flutter/flutter/issues/10428
-      var length = 0.0;
-      //pm.setPath(trimPathPath, false);
-      //double length = pm.getLength();
+      // FIXME: review
+      var length = trimPath.computeMetrics().first.length;
 
       if (endLength > totalLength &&
           endLength - totalLength < currentLength + length &&
@@ -211,9 +208,7 @@ class StrokeDrawable extends AnimationDrawable {
       }
     }
 
-    Rect outBounds = new Rect.fromLTRB(0.0, 0.0, 0.0, 0.0);
-    //TODO: computeBounds method is not expose
-    //path.computeBounds(outBounds, false);
+    Rect outBounds = path.getBounds();
 
     final width = _widthAnimation.value;
     return new Rect.fromLTRB(

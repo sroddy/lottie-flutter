@@ -45,7 +45,7 @@ class Keyframe<T> {
       return;
     }
 
-    _startFrame = map['t'] ?? 0.0;
+    _startFrame = map['t'].toInt() ?? 0;
     _startValue = map.containsKey('s') ? parser.parse(map['s'], scale) : null;
     _endValue = map.containsKey('e') ? parser.parse(map['e'], scale) : null;
 

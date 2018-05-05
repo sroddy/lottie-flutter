@@ -33,9 +33,7 @@ abstract class FillDrawable extends AnimationDrawable {
   @override
   Rect getBounds(Matrix4 parentMatrix) {
     Path path = _createPathFromSection(parentMatrix);
-    Rect outBounds = new Rect.fromLTRB(0.0, 0.0, 0.0, 0.0);
-    //TODO: computeBounds method is not expose
-    //path.computeBounds(outBounds, false);
+    Rect outBounds = path.getBounds();
     return new Rect.fromLTRB(outBounds.left - 1, outBounds.top - 1,
         outBounds.right + 1, outBounds.bottom + 1);
   }

@@ -113,11 +113,11 @@ MergePathsMode parseMergePathsMode(dynamic map) {
 }
 
 
-LineDashGroup parseLineDash(dynamic map, double scale, double durationFrames) {
-  AnimatableDoubleValue offset;
+LineDashGroup parseLineDash(Map map, double scale, double durationFrames) {
+  AnimatableDoubleValue offset = new AnimatableDoubleValue();
   final lineDashPattern = new List<AnimatableDoubleValue>();
 
-  if (map.contains('d')) {
+  if (map.containsKey('d')) {
     List rawDashes = map['d'];
     for (var rawDash in rawDashes) {
       final String n = rawDash['n'];

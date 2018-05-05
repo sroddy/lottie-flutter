@@ -5,16 +5,16 @@ import 'package:lottie_flutter/src/images.dart';
 import 'package:lottie_flutter/src/layers.dart';
 
 
-int parseStartFrame(dynamic map) => map['ip'] ?? 0.0;
+int parseStartFrame(dynamic map) => map['ip'].toInt() ?? 0;
 
-int parseEndFrame(dynamic map) => map['op'] ?? 0.0;
+int parseEndFrame(dynamic map) => map['op'].toInt() ?? 0;
 
-int parseFrameRate(dynamic map) => map['fr'] ?? 0.0;
+int parseFrameRate(dynamic map) => map['fr'].toInt() ?? 0;
 
 Rect parseBounds(dynamic map) {
   double scale = ui.window.devicePixelRatio;
-  int width = map['w'];
-  int height = map['h'];
+  num width = map['w'];
+  num height = map['h'];
 
   if (width != null && height != null) {
     double scaledWidth = width * scale;

@@ -99,7 +99,7 @@ class Layer {
       return new Layer.empty(preCompWidth, preCompHeight);
     }
 
-    final int rawType = map['ty'] ?? -1;
+    final int rawType = map['ty'].toInt() ?? -1;
     final LayerType type = rawType < LayerType.Unknown.index ? LayerType
         .values[rawType]
         : LayerType.Unknown;
@@ -132,12 +132,12 @@ class Layer {
 
     List<Keyframe<double>> inOutKeyframes = [];
 
-    final int inFrame = map['ip'];
+    final int inFrame = map['ip'].toInt();
     if (inFrame > 0) {
       inOutKeyframes.add(new Keyframe(0, inFrame, durationFrames, 0.0, 0.0));
     }
 
-    final int outFrame = map['op'] > 0 ? map['op'] : endFrame + 1;
+    final int outFrame = map['op'].toInt() > 0 ? map['op'].toInt() : endFrame + 1;
     inOutKeyframes.add(
         new Keyframe(inFrame, outFrame, durationFrames, 1.0, 1.0));
 

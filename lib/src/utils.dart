@@ -19,7 +19,7 @@ import 'package:vector_math/vector_math_64.dart';
 Color parseColor(String colorString) {
   if (colorString[0] == '#') {
     int color = int.parse(colorString.substring(0),
-        radix: 16, onError: (source) => null);
+        radix: 16, onError: (source) => 0xff000000);
     if (colorString.length == 7) {
       return new Color(color |= 0x00000000ff000000);
     }
@@ -102,9 +102,60 @@ Path applyScaleTrimIfNeeded(
   return applyTrimPathIfNeeded(path, start / 100.0, end / 100.0, offset / 100.0);
 }
 
-// TODO: wait for SkPathMeasure https://github.com/flutter/flutter/issues/10428
-Path applyTrimPathIfNeeded(Path path, double start, double end, double offset) {
+Path applyTrimPathIfNeeded(Path path, double startValue, double endValue, double offsetValue) {
+  final metrics = path.computeMetrics().first;
+
+  final length = metrics.length;
+  if (startValue == 1.0 && endValue == 0.0) {
+    return path;
+  }
+  if (length < 1.0 || (endValue - startValue - 1).abs() < 0.01) {
   return path;
+  }
+
+  final start = length * startValue;
+  final end = length * endValue;
+  var newStart = min(start, end);
+  var newEnd = max(start, end);
+
+  final offset = offsetValue * length;
+  newStart += offset;
+  newEnd += offset;
+
+  // If the trim path has rotated around the path, we need to shift it back.
+  if (newStart >= length && newEnd >= length) {
+    newStart = _floorMod(newStart, length).toDouble();
+    newEnd = _floorMod(newEnd, length).toDouble();
+  }
+
+  if (newStart < 0) {
+    newStart = _floorMod(newStart, length).toDouble();
+  }
+  if (newEnd < 0) {
+    newEnd = _floorMod(newEnd, length).toDouble();
+  }
+
+  // If the start and end are equals, return an empty path.
+  if (newStart == newEnd) {
+    path.reset();
+    return path;
+  }
+
+  if (newStart >= newEnd) {
+    newStart -= length;
+  }
+
+  final tempPath = metrics.extractPath(newStart, newEnd);
+
+  if (newEnd > length) {
+    final tempPath2 = metrics.extractPath(0.0, newEnd % length);
+    tempPath.addPath(tempPath2, const Offset(0.0, 0.0));
+  } else if (newStart < 0) {
+    final tempPath2 = metrics.extractPath(length + newStart, length);
+    tempPath.addPath(tempPath2, const Offset(0.0, 0.0));
+  }
+
+  return tempPath;
 }
 
 
@@ -137,3 +188,19 @@ Shader _createRadialGradientShader(GradientColor gradient, double x0,
       colors: gradient.colors,
       stops: gradient.positions,
     ).createShader(bounds);
+
+int _floorMod(num x, num y) {
+  x = x.toInt();
+  y = y.toInt();
+  return x - y * _floorDiv(x, y);
+}
+
+int _floorDiv(int x, int y) {
+  var r = (x ~/ y);
+  final sameSign = (x ^ y) >= 0;
+  final mod = x % y;
+  if (!sameSign && mod != 0) {
+    r--;
+  }
+  return r;
+}
