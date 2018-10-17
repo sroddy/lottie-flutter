@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'dart:typed_data';
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:flutter/painting.dart';
 import 'package:lottie_flutter/src/animations.dart';
@@ -133,7 +133,7 @@ Path applyTrimPathIfNeeded(Path path, double start, double end, double offset) {
     return path;
   }
 
-  final PathMetric measure = path.computeMetrics().first;
+  final ui.PathMetric measure = path.computeMetrics().first;
   final double length = measure.length;
   if (length < 1.0 || (end - start - 1).abs() < .01) {
     return path;
@@ -207,19 +207,27 @@ Shader createGradientShader(GradientColor gradient, GradientType type,
 }
 
 Shader _createLinearGradientShader(GradientColor gradient, double x0, double y0,
-        double x1, double y1, Rect bounds) =>
-    new LinearGradient(
-      begin: new FractionalOffset(x0, y0),
-      end: new FractionalOffset(x1, y1),
-      colors: gradient.colors,
-      stops: gradient.positions,
-    ).createShader(bounds);
+    double x1, double y1, Rect bounds) {
+  // print('x0: $x0, y0: $y0, x1: $x1, y1: $y1');
+
+  return new ui.Gradient.linear(
+    Offset(x0, y0),
+    Offset(x1, y1),
+    gradient.colors,
+    gradient.positions,
+  );
+}
 
 Shader _createRadialGradientShader(GradientColor gradient, double x0, double y0,
-        double x1, double y1, Rect bounds) =>
-    new RadialGradient(
-      center: new FractionalOffset(x0, y0),
-      radius: sqrt(pow(x1 - x0, 2) * pow(y1 - y0, 2)),
-      colors: gradient.colors,
-      stops: gradient.positions,
-    ).createShader(bounds);
+    double x1, double y1, Rect bounds) {
+  final double radius = sqrt(pow(x1 - x0, 2) + pow(y1 - y0, 2));
+
+  // print('x0: $x0, y0: $y0, x1: $x1, y1: $y1, radius: $radius');
+
+  return new ui.Gradient.radial(
+    Offset(x0, y0),
+    radius,
+    gradient.colors,
+    gradient.positions,
+  );
+}
