@@ -83,7 +83,9 @@ class MergePathsDrawable extends AnimationDrawable implements PathContent {
       case MergePathsMode.Subtract:
         return opFirstPathWithRest(PathOperation.reverseDifference);
       case MergePathsMode.Intersect:
-        return opFirstPathWithRest(PathOperation.intersect);
+        // TODO: figure out why this is broken.
+        // return opFirstPathWithRest(PathOperation.intersect);
+        return opFirstPathWithRest(PathOperation.union);
       case MergePathsMode.ExcludeIntersections:
         return opFirstPathWithRest(PathOperation.xor);
       default:
