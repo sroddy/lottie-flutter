@@ -261,6 +261,11 @@ class SplitDimensionPathKeyframeAnimation extends KeyframeAnimation<Offset> {
   }
 
   @override
+  Offset get value {
+    return new Offset(xAnimation.value, yAnimation.value);
+  }
+
+  @override
   Offset getValue(Keyframe<Offset> keyframe, double keyframeProgress) {
     return new Offset(xAnimation.value, yAnimation.value);
   }
