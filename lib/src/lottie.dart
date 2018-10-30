@@ -56,6 +56,7 @@ class _LottieState extends State<Lottie> with SingleTickerProviderStateMixin {
           vsync: this,
         )..repeat());
 
+    _compositionLayer?.progress = _animation.value;
     _animation.addListener(_handleChange);
   }
 
